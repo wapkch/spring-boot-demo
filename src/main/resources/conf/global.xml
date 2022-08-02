@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:c="http://www.springframework.org/schema/c"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+                           http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd
+                           http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd"
+                           
+       default-init-method="initialize"
+       default-destroy-method="destroy">
+
+    <!-- Use this file to define any custom beans needed globally. -->
+
+    <!--
+    Algorithm include/exclude sets that override or merge with library defaults. Normally you can leave these
+    empty or commented and use the system defaults, but you can override those defaults using these beans.
+    Each <value> element is an algorithm URI; you can also use <util:constant> elements in place of literal values.
+    -->
+    
+    <!--
+    <util:set id="shibboleth.IncludedSignatureAlgorithms">
+    </util:set>
+
+    <util:set id="shibboleth.ExcludedSignatureAlgorithms">
+    </util:set>
+
+    <util:set id="shibboleth.IncludedEncryptionAlgorithms">
+    </util:set>
+
+    <util:set id="shibboleth.ExcludedEncryptionAlgorithms">
+    </util:set>
+    -->
+
+    <!--
+    If you need to define and inject custom Java object(s) into the various views used throughout the
+    system (errors, login, logout, etc.), you can uncomment and define the bean below to be of any
+    type required. It will appear in the view scope as a variable named "custom".
+    
+    The example below defines the bean as a map, which allows you to inject multiple objects under
+    named keys to expand the feature to support multiple injected objects.
+    -->
+    
+    <!--
+    <util:map id="shibboleth.CustomViewContext">
+        <entry key="foo" value="bar"/>
+    </util:map>
+    -->
+    
+    <util:set id="shibboleth.PlaintextNameIDFormats">
+        <util:constant static-field="org.opensaml.saml.saml2.core.NameIDType.ENTITY" />
+        <util:constant static-field="org.opensaml.saml.saml2.core.NameIDType.TRANSIENT" />
+    </util:set>
+    
+    <util:set id="testbed.MetadataIndexes">
+        <bean class="org.opensaml.saml.metadata.resolver.index.impl.SAMLArtifactMetadataIndex" />
+        <ref bean="shibboleth.CASMetadataIndices" />
+    </util:set>
+    
+	<jdbc:embedded-database id="testbed.PairwiseIdDataSource" generate-name="true">
+	    <jdbc:script location="classpath:/META-INF/net/shibboleth/idp/StoredIdStore.sql"/>
+	</jdbc:embedded-database>
+    
+    <bean id="exampleMetadata" class="org.springframework.core.io.ClassPathResource">
+        <constructor-arg value="/metadata/example-metadata.xml"/>
+    </bean>
+          
+    <bean id="exampleMetadata-sp123" class="org.springframework.core.io.ClassPathResource">
+        <constructor-arg value="/metadata/example-sp123-metadata.xml"/>
+    </bean>
+      
+    <util:list id="testbed.MetadataResolverResources">
+        <value>%{idp.home}/conf/metadata-providers.xml</value>
+        <value>%{idp.home}/conf/metadata-filters.xml</value>
+    </util:list>
+    
+    <bean id="testbed.JDBCDataSource" class="org.hsqldb.jdbc.JDBCDataSource">
+        <property name="url" value="jdbc:hsqldb:mem:Mock" />
+        <property name="user" value="SA" />
+        <property name="password" value="" />
+    </bean>
+
+    <jdbc:initialize-database data-source="testbed.JDBCDataSource" ignore-failures="ALL">
+        <jdbc:script location="classpath:/test/test-jdbc.sql"/>
+    </jdbc:initialize-database>
+
+    <bean id="shibboleth.oidc.OpenIDConfiguration" class="org.springframework.core.io.ClassPathResource"
+        c:path="/static/openid-configuration.json" />
+
+    <!--
+    <bean id="shibboleth.authn.TOTP.SeedSource" parent="shibboleth.authn.TOTP.StaticSeedSource">
+        <property name="seeds">
+            <map>
+                <entry key="jdoe">
+                    <list>
+                        <value>K44GQWBAI54IQELEGYPDZG5LAJ6EJX73</value>
+                    </list>
+                </entry>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="shibboleth.ExtensionSchemas" parent="shibboleth.DefaultExtensionSchemas">
+        <property name="sourceList">
+            <list merge="true">
+                <value>classpath:/schema/saml-metadata-ext-oidcmd.xsd</value>
+            </list>
+        </property>
+    </bean>
+    -->
+</beans>

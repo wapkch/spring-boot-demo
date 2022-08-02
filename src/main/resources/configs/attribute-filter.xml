@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Part one of a two part Attribute Filter Policy. -->
+<AttributeFilterPolicyGroup id="ShibbolethFilterPolicy"
+	xmlns="urn:mace:shibboleth:2.0:afp" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="urn:mace:shibboleth:2.0:afp http://shibboleth.net/schema/idp/shibboleth-afp.xsd">
+
+	<!-- Release OK if RA map -->
+	<AttributeFilterPolicy id="RAOKFILTER">
+		<PolicyRequirementRule id="prrRA1"
+			xsi:type="ANY" />
+
+		<AttributeRule attributeID="IdPRA1" id="ra1release">
+			<PermitValueRule xsi:type="MappedAttributeInMetadata" />
+		</AttributeRule>
+
+	</AttributeFilterPolicy>
+	
+	
+    <!-- Release OK if RA map, but it doesn't -->
+	<AttributeFilterPolicy id="RANOTFILTER">
+        <PolicyRequirementRule id="prrRA2"
+            xsi:type="ANY" />
+
+        <AttributeRule attributeID="IdPEA1" id="ra2release">
+            <PermitValueRule xsi:type="MappedAttributeInMetadata" />
+        </AttributeRule>
+
+    </AttributeFilterPolicy>
+	
+
+    <!--  Release if EA map -->
+	<AttributeFilterPolicy id="EAOKFILTER">
+		<PolicyRequirementRule id="prrEA1" xsi:type="EntityAttributeExactMatch"
+            attributeName="http://macedir.org/entity-category"
+            attributeValue="http://refeds.org/category/research-and-scholarship" />
+
+		<AttributeRule attributeID="IdPOK">
+			<PermitValueRule xsi:type="ANY"/>
+		</AttributeRule>
+
+	</AttributeFilterPolicy> 
+
+</AttributeFilterPolicyGroup>

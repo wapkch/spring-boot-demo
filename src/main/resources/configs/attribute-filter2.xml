@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Part two of a two part filter files. -->
+<AttributeFilterPolicyGroup id="ShibbolethFilterPolicy"
+	xmlns="urn:mace:shibboleth:2.0:afp" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="urn:mace:shibboleth:2.0:afp http://shibboleth.net/schema/idp/shibboleth-afp.xsd">
+
+ <AttributeFilterPolicy id="EANOTKFILTER">
+        <PolicyRequirementRule id="prrEA2" xsi:type="EntityAttributeExactMatch"
+            attributeName="http://macedir.org/entity-category"
+            attributeValue="http://example.org/category" />
+
+        <AttributeRule attributeID="IdPNotOK">
+            <PermitValueRule xsi:type="ANY"/>
+        </AttributeRule>
+
+    </AttributeFilterPolicy> 
+
+</AttributeFilterPolicyGroup>

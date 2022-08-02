@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="false">
+    <property name="project.name" value="springbootdemo"/>
+    <property name="logging.path" value="/Users/wangchao/alidata1/admin/springbootdemo"/>
+
+    <springProfile name="local">
+        <property name="logging.path" value="${user.home}/temp/logs"/>
+        <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    </springProfile>
+
+    <include resource="log/logback-file-appender.xml"/>
+
+    <root>
+        <level value="INFO"/>
+        <appender-ref ref="errorAppenderAsync"/>
+        <appender-ref ref="infoAppenderAsync"/>
+        <appender-ref ref="STDOUT"/>
+    </root>
+</configuration>

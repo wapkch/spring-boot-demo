@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: spring-boot-demo
+  cloud:
+    nacos:
+      config:
+        file-extension: yml
+        server-addr: ${CONFIG_SERVER_URL:http://localhost:8848}
+        namespace: ${DEPLOY_ENV:public}
+        group: ${NACOS_GROUP:demo}
+        enabled: ${NACOS_ENABLE:false}
+        refresh-enabled: ${NACOS_REFRESH:true}
